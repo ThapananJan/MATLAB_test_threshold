@@ -44,6 +44,11 @@ for i=1:row     %% i is candidate   &   j is query
         ans_similar(i,j) = obj.Similarity_answer();
     end
 end
+fdtw_name = strcat('C:\Users\sura\Desktop\BCI_workspace\New_Similarity\',strcat(name{round},'_TRAIN_DTW_dist_column_query_row_cand.txt'));
+fdtwsim_name = strcat('C:\Users\sura\Desktop\BCI_workspace\New_Similarity\',strcat(name{round},'_TRAIN_DTW_sim_column_query_row_cand.txt'));
+dlmwrite(fdtw_name,ans_dtw,'delimiter','\t');
+dlmwrite(fdtwsim_name,ans_similar,'delimiter','\t');
+
 
 % [B_d,I_d] = sort(ans_dtw);
 % [B_s,I_s] = sort(ans_similar,'descend');
@@ -78,31 +83,24 @@ end
 
 end
 
-fprintf('mean_dis = %f , sd = %f\n',mean(raw_dis),std(raw_dis));
-fprintf('mean_sim = %f , sd = %f\n',mean(raw_sim),std(raw_sim));
+% fprintf('mean_dis = %f , sd = %f\n',mean(raw_dis),std(raw_dis));
+% fprintf('mean_sim = %f , sd = %f\n',mean(raw_sim),std(raw_sim));
 
-figure();
-errorbar([1:47],mean_dis,sd_dis,'x');
-ylabel('mean +- sd of the dtw for the first 4 rank that most similar');
-xlabel('dataset');
-xlim([0 47]);
-% saveas(gcf,'C:\Users\sura\Desktop\BCI_workspace\รูป Threshold testing\dtw mean_sd of the dtw for the first 4 rank that most similar','epsc');
-
-figure();
-errorbar([1:47],mean_sim,sd_sim,'x');
-ylabel('mean +- sd of the similarity for the first 4 rank that most similar');
-xlabel('dataset');
-xlim([0 47]);
-ylim([0 1.0]);
-% saveas(gcf,'C:\Users\sura\Desktop\BCI_workspace\รูป Threshold testing\similarity mean_sd of the dtw for the first 4 rank that most similar','epsc');
-
-
-% figure;
-% errorbar([1:47],Y,E,'x');
-% ylabel('mean +- sd of the different in rank');
+% figure();
+% errorbar([1:47],mean_dis,sd_dis,'x');
+% ylabel('mean +- sd of the dtw for the first 4 rank that most similar');
 % xlabel('dataset');
 % xlim([0 47]);
-% saveas(gcf,'C:\Users\Tong\Desktop\BCI_workspace\รูป Threshold testing\mean_sd of the different','epsc');
+% saveas(gcf,'C:\Users\sura\Desktop\BCI_workspace\รูป Threshold testing\dtw mean_sd of the dtw for the first 4 rank that most similar','epsc');
+
+% figure();
+% errorbar([1:47],mean_sim,sd_sim,'x');
+% ylabel('mean +- sd of the similarity for the first 4 rank that most similar');
+% xlabel('dataset');
+% xlim([0 47]);
+% ylim([0 1.0]);
+% saveas(gcf,'C:\Users\sura\Desktop\BCI_workspace\รูป Threshold testing\similarity mean_sd of the dtw for the first 4 rank that most similar','epsc');
+
 
 % figure;
 % plot(kendall_tau,'x');
