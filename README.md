@@ -27,7 +27,6 @@ name = importdata('C:\Users\sura\Desktop\Dataset\UCR 47 dataset\47_Trainingset_N
 Y = []; %% use in plot error graph
 E = []; %% use in plot error graph
 kendall_tau = [];
-% round = 2;
 for round=1:number_of_file
     
 file = {'C:\Users\sura\Desktop\Dataset\UCR 47 dataset\'};
@@ -36,49 +35,29 @@ file=char(file)
 
 Data = importdata(file);
 [row,column] = size(Data);
-ans_dtw = zeros(row,1);
-ans_similar = zeros(row,1);
-for i=1:row
-    obj = MATLAB_DBA.DTW_distance(Data(i,2:column),Data(1,2:column),100);
-    ans_dtw(i,1) = obj.DTW_answer();
-    ans_similar(i,1) = obj.Similarity_answer();
+ans_dtw = zeros(row,row);
+ans_similar = zeros(row,row);
+for i=1:row     %% i is candidate   &   j is query
+    for j=1:row
+        obj = MATLAB_DBA.DTW_distance(Data(j,2:column),Data(i,2:column),100);
+        ans_dtw(i,j) = obj.DTW_answer();
+        ans_similar(i,j) = obj.Similarity_answer();
+    end
 end
-[B_d,I_d] = sort(ans_dtw);
-[B_s,I_s] = sort(ans_similar,'descend');
 
-raw_dis = [raw_dis, B_d(1:4,1)'];
-mean_dis = [mean_dis, mean(B_d(1:4,1))];
-sd_dis = [sd_dis, std(B_d(1:4,1))];
-raw_sim = [raw_sim, B_s(1:4,1)'];
-mean_sim = [mean_sim, mean(B_s(1:4,1))];
-sd_sim = [sd_sim, std(B_s(1:4,1))];
-
-
-
-% %%%%%%%%%%%%%%%%%% counting the different index
-% count = 0;
-% for i=1:row
-%     if(I_d(i) ~= I_s(i)) 
-%         count = count+1;
-%     end
-% end
-% fprintf('number of different position from %d\t = %d\n',row,count);
+% [B_d,I_d] = sort(ans_dtw);
+% [B_s,I_s] = sort(ans_similar,'descend');
+% 
+% raw_dis = [raw_dis, B_d(1:4,1)'];
+% mean_dis = [mean_dis, mean(B_d(1:4,1))];
+% sd_dis = [sd_dis, std(B_d(1:4,1))];
+% raw_sim = [raw_sim, B_s(1:4,1)'];
+% mean_sim = [mean_sim, mean(B_s(1:4,1))];
+% sd_sim = [sd_sim, std(B_s(1:4,1))];
 
 
-% %%%%%%%%%%%%%%%%% find the maximum different position
-% count = 0;
-% temp = 0;
-% sum = zeros(row,1);
-% for i=1:row
-%     temp = find(I_s == I_d(i))-i;
-%     sum(i) = abs(temp);
-%     if(count < temp)
-%     	count = temp;
-%     end
-% end
-% fprintf('maximum different = %d index\nmean = %f , sd = %f\n',count,mean(sum),std(sum));
-% Y = [Y,mean(sum)];
-% E = [E,std(sum)];
+
+
 
 
 % %%%%%%%%%%%%%%%%% Kandell tau rank correlation ......    using I_d as reference
@@ -107,7 +86,7 @@ errorbar([1:47],mean_dis,sd_dis,'x');
 ylabel('mean +- sd of the dtw for the first 4 rank that most similar');
 xlabel('dataset');
 xlim([0 47]);
-saveas(gcf,'C:\Users\sura\Desktop\BCI_workspace\รูป Threshold testing\dtw mean_sd of the dtw for the first 4 rank that most similar','epsc');
+% saveas(gcf,'C:\Users\sura\Desktop\BCI_workspace\รูป Threshold testing\dtw mean_sd of the dtw for the first 4 rank that most similar','epsc');
 
 figure();
 errorbar([1:47],mean_sim,sd_sim,'x');
@@ -115,7 +94,7 @@ ylabel('mean +- sd of the similarity for the first 4 rank that most similar');
 xlabel('dataset');
 xlim([0 47]);
 ylim([0 1.0]);
-saveas(gcf,'C:\Users\sura\Desktop\BCI_workspace\รูป Threshold testing\similarity mean_sd of the dtw for the first 4 rank that most similar','epsc');
+% saveas(gcf,'C:\Users\sura\Desktop\BCI_workspace\รูป Threshold testing\similarity mean_sd of the dtw for the first 4 rank that most similar','epsc');
 
 
 % figure;
